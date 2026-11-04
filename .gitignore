@@ -1,0 +1,131 @@
+const STORAGE_KEY = 'taskflow.tasks';
+const FILTERS = ['all', 'active', 'completed'];
+
+const form = document.getElementById('task-form');
+const input = document.getElementById('task-input');
+const taskList = document.getElementById('task-list');
+const taskCount = document.getElementById('task-count');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const clearCompletedButton = document.getElementById('clear-completed');
+
+let tasks = loadTasks();
+let activeFilter = 'all';
+
+function loadTasks() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return Array.isArray(stored) ? stored : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function createTask(label) {
+  return {
+    id: Date.now() + Math.random(),
+    label,
+    completed: false,
+  };
+}
+
+function render() {
+  const visibleTasks = tasks.filter((task) => {
+    if (activeFilter === 'active') return !task.completed;
+    if (activeFilter === 'completed') return task.completed;
+    return true;
+  });
+
+  taskList.innerHTML = '';
+
+  if (visibleTasks.length === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'task-item';
+    empty.innerHTML = '<span class="task-text">No tasks here yet.</span>';
+    taskList.appendChild(empty);
+  } else {
+    visibleTasks.forEach((task) => {
+      const item = document.createElement('li');
+      item.className = `task-item ${task.completed ? 'completed' : ''}`;
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = task.completed;
+      checkbox.setAttribute('aria-label', `Mark ${task.label} complete`);
+      checkbox.addEventListener('change', () => {
+        task.completed = checkbox.checked;
+        saveTasks();
+        render();
+      });
+
+      const text = document.createElement('span');
+      text.className = 'task-text';
+      text.textContent = task.label;
+
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'delete-btn';
+      deleteButton.textContent = 'Delete';
+      deleteButton.setAttribute('aria-label', `Delete ${task.label}`);
+      deleteButton.addEventListener('click', () => {
+        tasks = tasks.filter((currentTask) => currentTask.id !== task.id);
+        saveTasks();
+        render();
+      });
+
+      item.append(checkbox, text, deleteButton);
+      taskList.appendChild(item);
+    });
+  }
+
+  const remaining = tasks.filter((task) => !task.completed).length;
+  taskCount.textContent = remaining === 1 ? '1 task left' : `${remaining} tasks left`;
+
+  filterButtons.forEach((button) => {
+    const isActive = button.dataset.filter === activeFilter;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const label = input.value.trim();
+
+  if (!label) {
+    input.focus();
+    return;
+  }
+
+  tasks.unshift(createTask(label));
+  input.value = '';
+  saveTasks();
+  render();
+  input.focus();
+});
+
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeFilter = button.dataset.filter;
+    render();
+  });
+});
+
+clearCompletedButton.addEventListener('click', () => {
+  tasks = tasks.filter((task) => !task.completed);
+  saveTasks();
+  render();
+});
+
+render();
+
+if (!Array.isArray(tasks) || tasks.length === 0) {
+  taskCount.textContent = '0 tasks left';
+}
+
+if (!FILTERS.includes(activeFilter)) {
+  activeFilter = 'all';
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskFlow</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Daily planner</p>
+          <h1>TaskFlow</h1>
+        </div>
+      </header>
+
+      <main class="card">
+        <form id="task-form" class="task-form">
+          <label class="sr-only" for="task-input">Add a task</label>
+          <input
+            id="task-input"
+            type="text"
+            placeholder="What needs to be done?"
+            maxlength="120"
+            autocomplete="off"
+          />
+          <button type="submit">Add Task</button>
+        </form>
+
+        <div class="toolbar" aria-label="Task controls">
+          <div class="filter-group" role="tablist" aria-label="Filter tasks">
+            <button class="filter-btn active" data-filter="all" type="button">All</button>
+            <button class="filter-btn" data-filter="active" type="button">Active</button>
+            <button class="filter-btn" data-filter="completed" type="button">Completed</button>
+          </div>
+
+          <button id="clear-completed" class="secondary-btn" type="button">Clear completed</button>
+        </div>
+
+        <ul id="task-list" class="task-list" aria-live="polite"></ul>
+
+        <div class="summary">
+          <span id="task-count">0 tasks left</span>
+        </div>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
