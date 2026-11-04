@@ -1,36 +1,30 @@
 # TaskFlow
 
-A simple, complete task manager web app built with HTML, CSS, and JavaScript.
+සරල, responsive task manager web app එකක්. HTML, CSS සහ JavaScript භාවිතයෙන් නිර්මාණය කර ඇත.
 
-## Features
+## විශේෂාංග
 
-- Add new tasks
-- Mark tasks as complete/incomplete
-- Filter tasks: all, active, completed
-- Clear completed tasks
-- Persistent data using browser localStorage
-- Clean, responsive layout
+- Tasks එකතු කිරීම, complete කිරීම සහ මකා දැමීම
+- All, Active සහ Completed ලෙස filter කිරීම
+- Completed tasks එකවර ඉවත් කිරීම
+- Browser `localStorage` භාවිතයෙන් tasks සුරැකීම
 
-## Project structure
+## තාක්ෂණ
 
-- `index.html` — app layout
-- `styles.css` — styling
-- `app.js` — task logic and localStorage behavior
+HTML, CSS, JavaScript
 
-## Run locally
+## පරිගණකයේ ධාවනය
 
-Open `index.html` directly in the browser, or serve the folder locally:
+`index.html` file එක browser එකෙන් විවෘත කරන්න. නැතිනම් project folder එකේ terminal එකෙන් මෙය ධාවනය කරන්න:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+ඉන්පසු `http://localhost:8000` වෙත යන්න.
 
-## Screenshot
+## Project files
 
-The app includes a modern card-based UI and a task list that remembers your work between refreshes.
-
-## License
-
-This project is provided as a simple starter/demo and can be customized freely.
+- `index.html` — app එකේ ව්‍යුහය
+- `styles.css` — පෙනුම සහ layout
+- `app.js` — task ක්‍රියාකාරීත්වය
